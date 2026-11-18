@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0908">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Кинотека">
+  <title>Кинотека</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="top-row">
+      <h1>Кинотека</h1>
+      <button class="icon-btn" id="help-btn" aria-label="Как добавить фильм">?</button>
+    </div>
+    <p class="storage" id="storage"></p>
+    <div class="tabs" role="tablist">
+      <button class="tab" data-filter="local" role="tab">На телефоне</button>
+      <button class="tab" data-filter="all" role="tab">Все фильмы</button>
+    </div>
+  </header>
+
+  <div class="install-hint" id="install-hint" hidden>
+    <strong>Установите на экран «Домой»</strong>
+    <span>Нажмите «Поделиться» <span class="share-glyph" aria-hidden="true">⬆︎</span> → «На экран Домой». Иначе iOS может стереть фильмы, если долго не открывать Safari.</span>
+  </div>
+
+  <main id="grid" class="grid"></main>
+  <p class="empty" id="empty" hidden>
+    На телефоне пока нет фильмов.<br>
+    Откройте «Все фильмы», выберите фильм и нажмите «Добавить файл».
+  </p>
+
+  <!-- Карточка фильма -->
+  <div class="sheet-backdrop" id="sheet" hidden>
+    <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="d-title">
+      <button class="sheet-close" id="sheet-close" aria-label="Закрыть">✕</button>
+      <div class="player-wrap">
+        <video id="player" controls preload="metadata" playsinline webkit-playsinline></video>
+      </div>
+      <div class="sheet-body">
+        <h2 id="d-title"></h2>
+        <p class="meta" id="d-meta"></p>
+        <div class="actions" id="d-actions"></div>
+        <p class="desc" id="d-desc"></p>
+        <p class="actors" id="d-actors"></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Справка -->
+  <div class="sheet-backdrop" id="help" hidden>
+    <section class="sheet sheet-text" role="dialog" aria-modal="true" aria-labelledby="h-title">
+      <button class="sheet-close" data-close="help" aria-label="Закрыть">✕</button>
+      <div class="sheet-body">
+        <h2 id="h-title">Как добавить фильм</h2>
+        <ol class="steps">
+          <li>На Mac отправьте файл фильма на iPhone через <b>AirDrop</b>.</li>
+          <li>Если видео попало в «Фото»: откройте его → «Поделиться» → <b>«Сохранить в Файлы»</b>. Так iOS не будет пережимать качество.</li>
+          <li>Здесь откройте фильм → <b>«Добавить файл»</b> → «Выбрать файлы» и найдите его.</li>
+          <li>Когда фильм появится во вкладке «На телефоне», удалите исходный файл из «Файлов» и «Фото», чтобы он не занимал место дважды.</li>
+        </ol>
+        <p class="note">Можно добавить сразу несколько: кнопка ниже сама узнает фильмы по оригинальным именам файлов (например <code>Nachalo_2010_720…mp4</code>).</p>
+        <button class="btn" id="bulk-btn">Добавить несколько файлов</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Выбор фильма для неопознанного файла -->
+  <div class="sheet-backdrop" id="assign" hidden>
+    <section class="sheet sheet-text" role="dialog" aria-modal="true" aria-labelledby="a-title">
+      <div class="sheet-body">
+        <h2 id="a-title">Какой это фильм?</h2>
+        <p class="note" id="a-file"></p>
+        <div class="assign-list" id="a-list"></div>
+        <button class="btn btn-ghost" id="a-skip">Пропустить файл</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <input type="file" id="file-one" accept="video/*,.mp4,.m4v,.mov" hidden>
+  <input type="file" id="file-many" accept="video/*,.mp4,.m4v,.mov" multiple hidden>
+
+  <script src="movies.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
